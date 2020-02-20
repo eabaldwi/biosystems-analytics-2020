@@ -42,9 +42,9 @@ def main():
 
     for i in day:
         if i in week:
-            print(week[i])
+            print(week.get(f'{i}'))
         else:
-            print(f"Can't find {day}")
+            print(f"Can't find"+f' "{i}"')
 
 
 
