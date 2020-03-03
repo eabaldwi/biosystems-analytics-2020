@@ -17,12 +17,12 @@ def get_args():
     parser = argparse.ArgumentParser(
         description='Find position of vowel in string',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
+#order in which they are declared matters
     parser.add_argument('vowel',
                         metavar='vowel',
                         help='A vowel to look for',
                         choices = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'])
-
+#couldve written this as choices = ['aeiouAEIOU']
     parser.add_argument('text',
                         metavar='text',
                         help='The text to search')
