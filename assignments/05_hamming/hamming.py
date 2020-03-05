@@ -45,49 +45,24 @@ def main():
 
     args = get_args()
 
-    if args.min:
-        smallest = args.min
 
+    count = 0
+    tot = 0
+    words = {}
 
     for line in args.file:
+
         word1, word2 = line.split()
-        distance = abs(len(word1) - len(word2))
+        count = abs(len(word1) - len(word2))
 
-#        print(distance)
+        for c1, c2 in zip(word1, word2):
+            if c1 == c2:
+                count += 0
+            elif c1 != c2:
+                count += 1
+        if count >= args.min:
+            print(f'{count:8}:{word1:20}{word2:20}')
 
-    # if len(word1) == len(word2):
-    #     paired = list(zip(word1, word2))
-    #     for i in paired:
-    #         if paired[i][0] == paired[i][1]:
-    #             print(f'{distance}:{word1}       {word2}')
-    #         else:
-    #             print('try again')
-    # else:
-    #     print('try again 2')
-
-
-#end of class extras
-#    for x in zip(word1, word2):
-#        print(f'{distance}}') #gives a list of tuples
-    count = 0
-
-    for c1, c2 in zip(word1, word2):
-        if c1 != c2:
-            count +=1
-            tot = distance + count
- #       print(f'{distance}:{word1}    {word2}'.order(distance))
- #       print(c1, c2, c1 == c2) #prints the characters, then checks if their distance is the same
-            print(f'{tot:8}:{word1:20}{word2}')
-
-        # if distance == 0:
-        #     print(f'{distance}:{word1}    {word2}')
-        # elif distance == 2:
-        #     print(f'{distance}:{word1}  2  {word2}')
-        # else:
-        #     print(f'{distance}:{word1}  3  {word2}')
-
-
-#zip() takes two lists and pairs the index of each, if there are different lengths its just the number of the shortest
 
 # --------------------------------------------------
 if __name__ == '__main__':
