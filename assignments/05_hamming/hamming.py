@@ -41,19 +41,53 @@ def get_args():
 def main():
     """Make a jazz noise here"""
 
+#given two strings are they even the same length
+
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
 
-    print('str_arg = "{}"'.format(str_arg))
-    print('int_arg = "{}"'.format(int_arg))
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ''))
-    print('flag_arg = "{}"'.format(flag_arg))
-    print('positional = "{}"'.format(pos_arg))
+    if args.min:
+        smallest = args.min
 
+
+    for line in args.file:
+        word1, word2 = line.split()
+        distance = abs(len(word1) - len(word2))
+
+#        print(distance)
+
+    # if len(word1) == len(word2):
+    #     paired = list(zip(word1, word2))
+    #     for i in paired:
+    #         if paired[i][0] == paired[i][1]:
+    #             print(f'{distance}:{word1}       {word2}')
+    #         else:
+    #             print('try again')
+    # else:
+    #     print('try again 2')
+
+
+#end of class extras
+#    for x in zip(word1, word2):
+#        print(f'{distance}}') #gives a list of tuples
+    count = 0
+
+    for c1, c2 in zip(word1, word2):
+        if c1 != c2:
+            count +=1
+            tot = distance + count
+ #       print(f'{distance}:{word1}    {word2}'.order(distance))
+ #       print(c1, c2, c1 == c2) #prints the characters, then checks if their distance is the same
+            print(f'{tot:8}:{word1:20}{word2}')
+
+        # if distance == 0:
+        #     print(f'{distance}:{word1}    {word2}')
+        # elif distance == 2:
+        #     print(f'{distance}:{word1}  2  {word2}')
+        # else:
+        #     print(f'{distance}:{word1}  3  {word2}')
+
+
+#zip() takes two lists and pairs the index of each, if there are different lengths its just the number of the shortest
 
 # --------------------------------------------------
 if __name__ == '__main__':
