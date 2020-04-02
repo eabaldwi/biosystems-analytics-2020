@@ -8,6 +8,7 @@ Purpose: Rock the Casbah
 import argparse
 import os
 import sys
+import random
 
 # import Bio
 # import re
@@ -31,7 +32,7 @@ def get_args():
                         '--outfile',
                         help='Output file',
                         metavar='FILE',
-                        type=argparse.FileType('r'),
+                        type=argparse.FileType('wt'),
                         default='out.fa')
 
     parser.add_argument('-t',
@@ -77,16 +78,66 @@ def get_args():
                         type=int,
                         default=None)
 
+    # args = parser.parse_args()
+    #
+    # if args.pctgc > 1:
+    #     parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
+    # elif args.pctgc < 0:
+    #     parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
+
+    args = parser.parse_args()
+    if not 0 < args.pctgc < 1:
+        parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
+
 
     return parser.parse_args()
 
+#--------------------------------------------
+def create_pool(pctgc, max_len, seq_type):
+    """ Create the pool of bases """
+
+    t_or_u = 'T' if seq_type == 'dna' else 'U'
+    num_gc = int((pctgc / 2) * max_len)
+    num_at = int(((1 - pctgc) / 2) * max_len)
+    pool = 'A' * num_at + 'C' * num_gc + 'G' * num_gc + t_or_u * num_at
+
+    for _ in range(max_len - len(pool)):
+        pool += random.choice(pool)
+
+    return ''.join(sorted(pool))
+
+# --------------------------------------------------
+#  def test_create_pool():
+#     """ Test create_pool """
+#
+#     state = random.getstate()
+#     random.seed(1)
+#     assert create_pool(.5, 10, 'dna') == 'AAACCCGGTT'
+#     assert create_pool(.6, 11, 'rna') == 'AACCCCGGGUU'
+#     assert create_pool(.7, 12, 'dna') == 'ACCCCCGGGGGT'
+#     assert create_pool(.7, 20, 'rna') == 'AAACCCCCCCGGGGGGGUUU'
+#     assert create_pool(.4, 15, 'dna') == 'AAAACCCGGGTTTTT'
+#     random.setstate(state)
 
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    print(args)
+    random.seed(args.seed)
+    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
+
+    for i in range(args.numseqs):
+        print(f'>{i+1} \n'
+              f'{pool}')
+    #     seq_len = random.randint(args.minlen, args.maxlen)
+    #     seq = random.sample(seq_len)
+    #     args.outfile.write(f'>{numberofseq} \n'
+    #                        f'{seq}'.join())
+    #
+    # print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} '
+    #       f'sequences to "{args.outfile}".')
+
 
 
 
