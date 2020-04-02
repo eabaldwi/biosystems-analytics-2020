@@ -78,13 +78,6 @@ def get_args():
                         type=int,
                         default=None)
 
-    # args = parser.parse_args()
-    #
-    # if args.pctgc > 1:
-    #     parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
-    # elif args.pctgc < 0:
-    #     parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
-
     args = parser.parse_args()
     if not 0 < args.pctgc < 1:
         parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
@@ -128,15 +121,14 @@ def main():
     pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
 
     for i in range(args.numseqs):
-        print(f'>{i+1} \n'
-              f'{pool}')
-    #     seq_len = random.randint(args.minlen, args.maxlen)
-    #     seq = random.sample(seq_len)
-    #     args.outfile.write(f'>{numberofseq} \n'
-    #                        f'{seq}'.join())
-    #
-    # print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} '
-    #       f'sequences to "{args.outfile}".')
+        seq_len = random.randint(args.minlen, args.maxlen)
+        seq = random.sample(pool, seq_len)
+        args.outfile.write(f'>{i+1} \n'
+                           f'{seq}')
+
+
+    print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} '
+          f'sequences to "{args.outfile.name}".')
 
 
 
