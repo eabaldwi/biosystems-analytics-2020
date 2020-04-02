@@ -122,9 +122,9 @@ def main():
 
     for i in range(args.numseqs):
         seq_len = random.randint(args.minlen, args.maxlen)
-        seq = random.sample(pool, seq_len)
+        seq = ''.join(random.sample(pool, seq_len))
         args.outfile.write(f'>{i+1} \n'
-                           f'{seq}')
+                           f'{seq} \n')
 
 
     print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} '
