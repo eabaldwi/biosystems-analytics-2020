@@ -77,7 +77,6 @@ def main():
 
     num_seqs = 0
     num_files = 0
-    sequences = 0
 
     for fh in args.file:
         num_files +=1
@@ -89,8 +88,7 @@ def main():
         for rec in SeqIO.parse(fh, 'fasta'):
             if random.random() <= args.pct:
                 SeqIO.write(rec, out_fh, 'fasta')
-                sequences += 1
-            num_seqs += sequences
+                num_seqs += 1
 
         out_fh.close()
 
