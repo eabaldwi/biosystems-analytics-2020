@@ -9,13 +9,8 @@ import argparse
 import os
 import sys
 import random
-#import Bio
-#from Bio import Seq
-
 from Bio import SeqIO
-# import biopython
-# from biopython import Seq
-# from biopython import SeqIO
+
 
 
 
@@ -81,7 +76,7 @@ def main():
     for fh in args.file:
         num_files +=1
         basename = os.path.basename(fh.name)
-        out_file = os.path.join(args.outdir, basename)
+        out_file = os.path.join(out_dir, basename)
         print(f'{num_files:3}: {basename}')
         out_fh = open(out_file, 'wt')
 
@@ -93,11 +88,11 @@ def main():
         out_fh.close()
 
     if num_seqs > 1 and num_files > 1:
-        print(f'Wrote {num_seqs} sequences in {num_files} files to directory "{args.outdir}"')
-    elif sequences > 1 and num_files == 1:
-        print(f'Wrote {num_seqs} sequences in {num_files} file to directory "{args.outdir}"')
+        print(f'Wrote {num_seqs:,} sequences from {num_files} files to directory "{args.outdir}"')
+    elif num_seqs > 1 and num_files == 1:
+        print(f'Wrote {num_seqs:,} sequences from {num_files} file to directory "{args.outdir}"')
     else:
-        print(f'Wrote {num_seqs} sequence in {num_files} file to directory "{args.outdir}"')
+        print(f'Wrote {num_seqs} sequence from {num_files} file to directory "{args.outdir}"')
 
 
 # --------------------------------------------------
