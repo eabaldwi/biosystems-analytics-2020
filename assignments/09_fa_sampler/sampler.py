@@ -76,7 +76,8 @@ def main():
 
     num_seqs = 0
     num_files = 0
-
+    sequences = 0
+    
     for fh in args.file:
         num_files +=1
         basename = os.path.basename(fh.name)
