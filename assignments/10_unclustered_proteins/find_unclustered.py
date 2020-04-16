@@ -22,19 +22,20 @@ def get_args():
                         '--proteins',
                         metavar='proteins',
                         help='Proteins FASTA',
-                        type=argparse.FileType('r'))
+                        type=argparse.FileType('r'),
+                        required=True)
 
     parser.add_argument('-c',
                         '--cdhit',
                         help='Output file from CD-HIT',
                         metavar='cdhit',
-                        type=argparse.FileType('rw'),
-                        default=None)
+                        type=argparse.FileType('rt'),
+                        required=True)
 
     parser.add_argument('-o',
                         '--outfile',
                         help='output file',
-                        metavar='outFILE',
+                        metavar='outfile',
                         type=argparse.FileType('wt'),
                         default='unclustered.fa')
 
@@ -47,7 +48,7 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    print(args)
+    print(args.proteins)
 
 
 
