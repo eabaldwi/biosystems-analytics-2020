@@ -8,6 +8,8 @@ Purpose: Rock the Casbah
 import argparse
 import os
 import sys
+import re
+from Bio import SeqIO
 
 
 # --------------------------------------------------
@@ -49,6 +51,42 @@ def main():
 
     args = get_args()
     print(args.proteins)
+
+    clustered_ids = {}
+
+    for line in args.cdhit:
+        if line.startswith('>'):
+            continue
+
+        #print(f'line "{line}"')
+
+
+        match = re.search(r'>(\d+)', line)
+        if match:
+            prot_id = match.group(1)
+            clustered_ids.add(prot_id)
+
+
+  #  print(len(clustered_ids))
+    num_total = 0
+    num_written = 0
+
+    for rec in SeqIO.parse(args.proteins, 'fasta'):
+        num_total += 1
+        # match2 = re.search(r'>(\d+)', rec.id)
+        # if match2:
+        #     prot_id = match2.group(1)
+        prot_id = re.sub('\|.*', '', rec.id)
+
+        if prot_id not in clustered_ids:
+            num_written += 1
+            Seq.IO.write(rec, args.outfile, 'fasta')
+
+       # break
+
+    print(f'Wrote {num_written:,} of {num_total:,} unclustered proteins to "{args.outfile.name}"')
+
+
 
 
 
