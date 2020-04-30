@@ -8,6 +8,8 @@ Purpose: Rock the Casbah
 import argparse
 import os
 import sys
+from Bio import SeqIO
+import re
 
 
 # --------------------------------------------------
@@ -18,35 +20,34 @@ def get_args():
         description='Rock the Casbah',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('positional',
-                        metavar='str',
-                        help='A positional argument')
-
-    parser.add_argument('-a',
-                        '--arg',
-                        help='A named string argument',
-                        metavar='str',
-                        type=str,
-                        default='')
-
-    parser.add_argument('-i',
-                        '--int',
-                        help='A named integer argument',
-                        metavar='int',
-                        type=int,
-                        default=0)
-
-    parser.add_argument('-f',
-                        '--file',
+    parser.add_argument('file',
                         help='A readable file',
                         metavar='FILE',
                         type=argparse.FileType('r'),
                         default=None)
 
+    parser.add_argument('-k',
+                        '--keyword',
+                        help='Keyword to take',
+                        metavar='str',
+                        type=str,
+                        default=None,
+                        required=True)
+
+    parser.add_argument('-s',
+                        '--skiptaxa',
+                        help='Taxa to skip',
+                        nargs='*',
+                        metavar='str',
+                        type=str,
+                        default=None)
+
     parser.add_argument('-o',
-                        '--on',
-                        help='A boolean flag',
-                        action='store_true')
+                        '--outfile',
+                        help='Output filename',
+                        metavar='FILE',
+                        type=argparse.FileType('wt'),
+                        default='out.fa')
 
     return parser.parse_args()
 
@@ -56,17 +57,35 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
 
-    print('str_arg = "{}"'.format(str_arg))
-    print('int_arg = "{}"'.format(int_arg))
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ''))
-    print('flag_arg = "{}"'.format(flag_arg))
-    print('positional = "{}"'.format(pos_arg))
+    recskipped = 0
+
+    if args.skiptaxa:
+        skip = set(map(str.lower, args.skiptaxa))
+
+    totaltake = 0
+
+    for rec in SeqIO.parse(args.file, "swiss"):
+        if 'taxonomy' in rec.annotations:
+            taxonomy = rec.annotations["taxonomy"]
+            taxa = set(map(str.lower, taxonomy))
+            skipped = skip.intersection(taxa)
+            recskipped += len(skipped)
+            if skipped == True:
+                next(rec)
+        else:
+            if 'keywords' in rec.annotations:
+                keywords = rec.annotations["keywords"]
+                keys = set(map(str.lower, keywords))
+                totaltake += len(keys)
+                if keys == True:
+                  SeqIO.write(rec, args.outfile, 'fasta')
+                else: next()
+
+    print(f'Done, skipped {recskipped} and took {totaltake}. See output in "{args.outfile.name}".')
+
+
+
 
 
 # --------------------------------------------------
